@@ -3,6 +3,7 @@ import { motion, useReducedMotion, type Transition } from 'framer-motion'
 import NumberFlow from '@number-flow/react'
 import type { PassportData } from '../../lib/passport'
 import { TRAIT_KEYS, type TraitKey, type Traits } from '../../lib/traits'
+import { whenDisplayFontReady } from './exportPassport'
 import './passport.css'
 
 const TRAIT_LABEL: Record<TraitKey, string> = {
@@ -58,8 +59,8 @@ function useFitText(text: string) {
     fit()
     const ro = new ResizeObserver(fit)
     ro.observe(el.parentElement ?? el)
-    const fonts = (document as Document & { fonts?: FontFaceSet }).fonts
-    fonts?.ready.then(fit).catch(() => {})
+    // Re-fit once Anton is actually loaded (fonts.ready alone can fire early).
+    whenDisplayFontReady().then(fit)
     return () => ro.disconnect()
   }, [text])
   return ref
