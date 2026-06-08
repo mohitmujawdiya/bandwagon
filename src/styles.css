@@ -1,5 +1,6 @@
 @import "tailwindcss" source(none);
 @import "./themes.css";
+@import "./anton-font.css";
 
 /* Scan local source + SDK components for Tailwind class usage */
 @source "./**/*.{ts,tsx}";
