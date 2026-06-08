@@ -1,20 +1,58 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { NATION_BY_CODE } from '../data/nations'
 import { assemblePassport } from '../lib/passport'
 import { SupporterPassport } from '../components/passport/SupporterPassport'
+import { PassportActions } from '../components/passport/PassportActions'
+import { capturePassportDataUrl } from '../components/passport/exportPassport'
 import type { QuizAnswers } from '../lib/assign'
 
 const NEUTRAL: QuizAnswers = {
   heritage: null, underdog: 0, playstyle: null, region: null, rivalCode: null, energy: null,
 }
 
-// Hue spread + rarity + the longest names, to validate duotone and name fitting.
 const CODES = ['ARG', 'BRA', 'MEX', 'MAR', 'FRA', 'CIV', 'GHA', 'CUW', 'SUI', 'NED', 'KSA', 'BIH']
+
+/** Renders the ACTUAL exported PNG back into the page, to verify export fidelity. */
+function ExportProof({ code }: { code: string }) {
+  const host = useRef<HTMLDivElement>(null)
+  const [url, setUrl] = useState<string>()
+  const [err, setErr] = useState<string>()
+  const passport = useMemo(() => assemblePassport(NATION_BY_CODE[code], NEUTRAL), [code])
+
+  useEffect(() => {
+    let alive = true
+    ;(async () => {
+      try {
+        const node = host.current?.querySelector('.passport') as HTMLElement
+        const dataUrl = await capturePassportDataUrl(node)
+        if (alive) setUrl(dataUrl)
+      } catch (e) {
+        if (alive) setErr(String(e))
+      }
+    })()
+    return () => { alive = false }
+  }, [code])
+
+  return (
+    <div className="flex flex-col items-center gap-3 py-6">
+      <p className="font-mono text-xs uppercase tracking-[0.18em] text-muted-foreground">
+        Exported PNG (1080x1920)
+      </p>
+      <div ref={host} aria-hidden style={{ position: 'fixed', left: -99999, top: 0, width: 1080 }}>
+        <SupporterPassport passport={passport} className="passport--export" />
+      </div>
+      {url
+        ? <img src={url} alt={`${code} export`} style={{ width: 300 }} />
+        : <p className="text-sm text-muted-foreground">{err ?? 'Exporting...'}</p>}
+    </div>
+  )
+}
 
 /** Dev-only gallery for iterating the passport visual. Real /p/[id] comes later. */
 export default function Preview() {
   const params = typeof window !== 'undefined' ? new URLSearchParams(window.location.search) : null
   const single = params?.get('code')?.toUpperCase() ?? null
+  const exportCode = params?.get('export')?.toUpperCase() ?? null
   const [playKey, setPlayKey] = useState(0)
 
   const passports = useMemo(
@@ -22,16 +60,16 @@ export default function Preview() {
     [],
   )
 
+  if (exportCode && NATION_BY_CODE[exportCode]) return <ExportProof code={exportCode} />
+
   if (single && NATION_BY_CODE[single]) {
+    const passport = assemblePassport(NATION_BY_CODE[single], NEUTRAL)
     return (
       <div className="flex flex-col items-center gap-5 px-4 py-4">
         <div className="w-[368px] max-w-full">
-          <SupporterPassport
-            key={playKey}
-            passport={assemblePassport(NATION_BY_CODE[single], NEUTRAL)}
-            reveal
-          />
+          <SupporterPassport key={playKey} passport={passport} reveal />
         </div>
+        <PassportActions passport={passport} />
         <button
           onClick={() => setPlayKey((k) => k + 1)}
           className="font-mono text-xs uppercase tracking-[0.18em] text-muted-foreground hover:text-foreground"

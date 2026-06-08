@@ -219,6 +219,13 @@
   color: var(--nation-glow);
 }
 
+/* Export variant — full-bleed 9:16 for sharing to Stories (no card radius,
+ * no max-width cap; the host wrapper sets the export width, e.g. 1080px). */
+.passport--export {
+  max-width: none;
+  border-radius: 0;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .passport * { animation: none !important; }
 }
