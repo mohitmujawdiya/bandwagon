@@ -2,7 +2,12 @@
  * Consumes --nation-primary / --nation-deep / --nation-glow (set inline per
  * result). Per DESIGN.md: nation owns the surface, type leads, grain + vignette
  * for depth (no gray drop shadows), traits as an editorial ticker (not a grid),
- * one sanctioned glass band (the ticket stub). */
+ * one sanctioned glass band (the ticket stub).
+ *
+ * Sizing is container-relative (cqw) via max(floor, Ncqw) with NO upper cap, so
+ * the poster is self-similar at any width: the 1080px export is an exact scale-up
+ * of the on-screen ~390px view. (Caps would freeze the supporting text small
+ * while the fit-to-width name kept growing.) */
 
 .passport {
   --ink: oklch(0.16 0.02 65); /* darker than cinema-black, for vignette/contrast */
@@ -36,7 +41,7 @@
   inset: 0;
   z-index: 1;
   background-image: radial-gradient(oklch(1 0 0) 0.5px, transparent 0.6px);
-  background-size: 3px 3px;
+  background-size: 0.8cqw 0.8cqw;
   opacity: 0.08;
   mix-blend-mode: overlay;
   pointer-events: none;
@@ -49,8 +54,8 @@
   z-index: 2;
   pointer-events: none;
   box-shadow:
-    inset 0 0 120px 24px color-mix(in oklab, var(--ink) 70%, transparent),
-    inset 0 -160px 120px -80px color-mix(in oklab, var(--ink) 85%, transparent);
+    inset 0 0 32cqw 6cqw color-mix(in oklab, var(--ink) 70%, transparent),
+    inset 0 -42cqw 32cqw -21cqw color-mix(in oklab, var(--ink) 85%, transparent);
 }
 
 /* Peak light-bloom — the cinematic alternative to confetti. The nation's glow
@@ -64,7 +69,7 @@
   background: radial-gradient(46% 46% at 50% 52%, var(--nation-glow), transparent 72%);
   mix-blend-mode: screen;
   opacity: 0;
-  filter: blur(6px);
+  filter: blur(1.6cqw);
 }
 
 /* Rarity foil — restrained iridescent sheen for off-meta nations. */
@@ -92,8 +97,8 @@
   height: 100%;
   display: flex;
   flex-direction: column;
-  padding: clamp(20px, 7cqw, 34px);
-  gap: clamp(14px, 4cqw, 22px);
+  padding: max(20px, 7cqw);
+  gap: max(14px, 4cqw);
 }
 
 /* Top rail — mono metadata, the "official document" voice. */
@@ -102,7 +107,7 @@
   justify-content: space-between;
   align-items: center;
   font-family: var(--font-mono);
-  font-size: clamp(0.56rem, 2.4cqw, 0.7rem);
+  font-size: max(0.56rem, 2.4cqw);
   letter-spacing: 0.18em;
   text-transform: uppercase;
 }
@@ -120,14 +125,14 @@
 }
 .passport__kicker {
   font-family: var(--font-mono);
-  font-size: clamp(0.62rem, 2.8cqw, 0.82rem);
+  font-size: max(0.62rem, 2.8cqw);
   font-weight: 500;
   letter-spacing: 0.16em;
   text-transform: uppercase;
   color: color-mix(in oklab, var(--nation-glow) 85%, white 0%);
 }
 .passport__name {
-  margin: clamp(4px, 1.6cqw, 10px) 0 0;
+  margin: max(4px, 1.6cqw) 0 0;
   font-family: var(--font-display);
   font-weight: 400; /* Anton is a single heavy weight */
   /* JS fit-to-width sizes this to span the poster as a masthead; the clamp is
@@ -141,9 +146,9 @@
   hyphens: none;
 }
 .passport__verdict {
-  margin: clamp(12px, 3.4cqw, 18px) 0 0;
+  margin: max(12px, 3.4cqw) 0 0;
   max-width: 92%;
-  font-size: clamp(0.92rem, 3.7cqw, 1.12rem);
+  font-size: max(0.92rem, 3.7cqw);
   line-height: 1.42;
   font-weight: 400;
   letter-spacing: 0.01em;
@@ -156,8 +161,8 @@
   display: flex;
   flex-wrap: wrap;
   align-items: baseline;
-  gap: clamp(10px, 3.2cqw, 18px);
-  padding-top: clamp(4px, 1.5cqw, 8px);
+  gap: max(10px, 3.2cqw);
+  padding-top: max(4px, 1.5cqw);
 }
 .trait {
   display: inline-flex;
@@ -167,14 +172,14 @@
 .trait__val {
   font-family: var(--font-display);
   font-weight: 400;
-  font-size: clamp(1.5rem, 6.6cqw, 2.3rem);
+  font-size: max(1.5rem, 6.6cqw);
   line-height: 1;
   color: var(--nation-glow);
   font-variant-numeric: tabular-nums;
 }
 .trait__label {
   font-family: var(--font-mono);
-  font-size: clamp(0.5rem, 2.1cqw, 0.62rem);
+  font-size: max(0.5rem, 2.1cqw);
   font-weight: 500;
   letter-spacing: 0.12em;
   text-transform: uppercase;
@@ -186,16 +191,16 @@
   position: relative;
   display: flex;
   align-items: center;
-  gap: clamp(10px, 3cqw, 16px);
-  margin-top: clamp(4px, 1.5cqw, 8px);
-  padding: clamp(11px, 3.2cqw, 15px) clamp(13px, 3.6cqw, 17px);
-  border-radius: 13px;
+  gap: max(10px, 3cqw);
+  margin-top: max(4px, 1.5cqw);
+  padding: max(11px, 3.2cqw) max(13px, 3.6cqw);
+  border-radius: max(13px, 1.2cqw);
   background: color-mix(in oklab, var(--ink) 32%, transparent);
-  backdrop-filter: blur(9px) saturate(1.1);
-  -webkit-backdrop-filter: blur(9px) saturate(1.1);
+  backdrop-filter: blur(2cqw) saturate(1.1);
+  -webkit-backdrop-filter: blur(2cqw) saturate(1.1);
   border: 1px solid color-mix(in oklab, var(--nation-glow) 20%, transparent);
   font-family: var(--font-mono);
-  font-size: clamp(0.56rem, 2.4cqw, 0.7rem);
+  font-size: max(0.56rem, 2.4cqw);
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: color-mix(in oklab, var(--nation-glow) 92%, white 0%);
@@ -204,11 +209,11 @@
   content: "";
   position: absolute;
   top: -1px;
-  left: 14px;
-  right: 14px;
+  left: max(14px, 1.3cqw);
+  right: max(14px, 1.3cqw);
   height: 1px;
   background-image: radial-gradient(circle, color-mix(in oklab, var(--nation-glow) 45%, transparent) 0 1px, transparent 1.2px);
-  background-size: 7px 1px;
+  background-size: max(7px, 0.65cqw) 1px;
   background-repeat: repeat-x;
 }
 .passport__flag { font-size: 1.15em; line-height: 1; }
