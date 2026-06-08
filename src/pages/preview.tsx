@@ -1,4 +1,4 @@
-import { useMemo } from 'react'
+import { useMemo, useState } from 'react'
 import { NATION_BY_CODE } from '../data/nations'
 import { assemblePassport } from '../lib/passport'
 import { SupporterPassport } from '../components/passport/SupporterPassport'
@@ -13,9 +13,9 @@ const CODES = ['ARG', 'BRA', 'MEX', 'MAR', 'FRA', 'CIV', 'GHA', 'CUW', 'SUI', 'N
 
 /** Dev-only gallery for iterating the passport visual. Real /p/[id] comes later. */
 export default function Preview() {
-  const single = typeof window !== 'undefined'
-    ? new URLSearchParams(window.location.search).get('code')?.toUpperCase()
-    : null
+  const params = typeof window !== 'undefined' ? new URLSearchParams(window.location.search) : null
+  const single = params?.get('code')?.toUpperCase() ?? null
+  const [playKey, setPlayKey] = useState(0)
 
   const passports = useMemo(
     () => CODES.map((c) => assemblePassport(NATION_BY_CODE[c], NEUTRAL)),
@@ -24,10 +24,20 @@ export default function Preview() {
 
   if (single && NATION_BY_CODE[single]) {
     return (
-      <div className="flex justify-center px-4 py-4">
+      <div className="flex flex-col items-center gap-5 px-4 py-4">
         <div className="w-[368px] max-w-full">
-          <SupporterPassport passport={assemblePassport(NATION_BY_CODE[single], NEUTRAL)} />
+          <SupporterPassport
+            key={playKey}
+            passport={assemblePassport(NATION_BY_CODE[single], NEUTRAL)}
+            reveal
+          />
         </div>
+        <button
+          onClick={() => setPlayKey((k) => k + 1)}
+          className="font-mono text-xs uppercase tracking-[0.18em] text-muted-foreground hover:text-foreground"
+        >
+          Replay reveal
+        </button>
       </div>
     )
   }

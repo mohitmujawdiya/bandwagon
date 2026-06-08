@@ -53,6 +53,20 @@
     inset 0 -160px 120px -80px color-mix(in oklab, var(--ink) 85%, transparent);
 }
 
+/* Peak light-bloom — the cinematic alternative to confetti. The nation's glow
+ * blooms from behind the hero at the emotional peak (framer animates it). */
+.passport__bloom {
+  position: absolute;
+  inset: 14% -18% auto -18%;
+  height: 74%;
+  z-index: 3;
+  pointer-events: none;
+  background: radial-gradient(46% 46% at 50% 52%, var(--nation-glow), transparent 72%);
+  mix-blend-mode: screen;
+  opacity: 0;
+  filter: blur(6px);
+}
+
 /* Rarity foil — restrained iridescent sheen for off-meta nations. */
 .passport__foil {
   position: absolute;
