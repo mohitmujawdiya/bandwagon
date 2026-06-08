@@ -6,6 +6,9 @@
 async function waitForRenderReady() {
   const fonts = (document as Document & { fonts?: FontFaceSet }).fonts
   if (fonts?.ready) await fonts.ready.catch(() => {})
+  // Let the component's own fonts.ready-driven re-fit (a microtask) apply
+  // before we measure/capture, then flush layout over two frames.
+  await new Promise<void>((resolve) => setTimeout(resolve, 90))
   await new Promise<void>((resolve) =>
     requestAnimationFrame(() => requestAnimationFrame(() => resolve())),
   )

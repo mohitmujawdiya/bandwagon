@@ -44,7 +44,16 @@ function useFitText(text: string) {
       if (avail <= 0) return
       el.style.fontSize = '240px'
       const natural = el.scrollWidth
-      if (natural > 0) el.style.fontSize = `${Math.min(240, (avail / natural) * 240)}px`
+      if (natural <= 0) return
+      let size = Math.min(240, (avail / natural) * 240)
+      el.style.fontSize = `${size}px`
+      // Second pass: measure the ACTUAL rendered width at this size (the first
+      // estimate can be off if a fallback font was active) and shrink to fit.
+      const rendered = el.scrollWidth
+      if (rendered > avail) {
+        size *= avail / rendered
+        el.style.fontSize = `${size}px`
+      }
     }
     fit()
     const ro = new ResizeObserver(fit)
