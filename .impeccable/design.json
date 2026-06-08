@@ -1,0 +1,175 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-06-08T12:00:00Z",
+  "title": "Design System: Bandwagon",
+  "extensions": {
+    "colorMeta": {
+      "signal-flare": {
+        "role": "primary",
+        "displayName": "Signal Flare",
+        "canonical": "oklch(67% 0.21 35)",
+        "tonalRamp": [
+          "oklch(15% 0.07 35)",
+          "oklch(25% 0.11 35)",
+          "oklch(35% 0.15 35)",
+          "oklch(45% 0.18 34)",
+          "oklch(55% 0.20 34)",
+          "oklch(67% 0.21 35)",
+          "oklch(78% 0.15 40)",
+          "oklch(90% 0.07 48)"
+        ]
+      },
+      "cinema-black": {
+        "role": "neutral",
+        "displayName": "Cinema Black",
+        "canonical": "oklch(18% 0.012 65)",
+        "tonalRamp": [
+          "oklch(15% 0.012 65)",
+          "oklch(22% 0.013 65)",
+          "oklch(30% 0.012 65)",
+          "oklch(40% 0.011 67)",
+          "oklch(52% 0.011 70)",
+          "oklch(64% 0.010 72)",
+          "oklch(80% 0.009 78)",
+          "oklch(94% 0.008 82)"
+        ]
+      },
+      "bone": {
+        "role": "neutral",
+        "displayName": "Bone",
+        "canonical": "oklch(92% 0.008 80)",
+        "tonalRamp": [
+          "oklch(20% 0.008 80)",
+          "oklch(34% 0.008 80)",
+          "oklch(48% 0.008 80)",
+          "oklch(62% 0.008 80)",
+          "oklch(74% 0.008 80)",
+          "oklch(86% 0.008 80)",
+          "oklch(92% 0.008 80)",
+          "oklch(97% 0.006 85)"
+        ]
+      },
+      "nation-primary": {
+        "role": "secondary",
+        "displayName": "Nation Primary (runtime; Argentina sample)",
+        "canonical": "oklch(72% 0.13 230)",
+        "tonalRamp": [
+          "oklch(22% 0.06 240)",
+          "oklch(30% 0.07 245)",
+          "oklch(40% 0.09 240)",
+          "oklch(50% 0.11 236)",
+          "oklch(60% 0.12 232)",
+          "oklch(72% 0.13 230)",
+          "oklch(82% 0.10 222)",
+          "oklch(90% 0.06 215)"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "display": { "displayName": "Display", "purpose": "The nation name on the passport, and landing hero. Tusker Grotesk, towering and condensed. Always the largest element on screen." },
+      "headline": { "displayName": "Headline", "purpose": "Section openers and the landing call. Tusker Grotesk, large but below Display." },
+      "title": { "displayName": "Title", "purpose": "Quiz questions and answer-tile labels. Hanken Grotesk, confident and readable." },
+      "body": { "displayName": "Body", "purpose": "The 'why you' paragraph and explanatory UI. Hanken Grotesk, max 65-70ch, extra line-height on dark." },
+      "label": { "displayName": "Label / Data", "purpose": "Archetype kicker, passport data fields, CTA text, tags. Martian Mono, small, tracked, uppercase." }
+    },
+    "shadows": [
+      { "name": "flare-bloom", "value": "0 8px 40px oklch(67% 0.21 35 / 0.35)", "purpose": "Warm colored glow under the primary CTA on hover. A light source, not a gray shadow." },
+      { "name": "nation-bloom", "value": "0 24px 120px oklch(72% 0.13 230 / 0.30)", "purpose": "Blooms in behind the passport at the peak of the reveal (uses --nation-primary at runtime). The poster is lit from behind." }
+    ],
+    "motion": [
+      { "name": "ease-out-expo", "value": "cubic-bezier(0.16, 1, 0.3, 1)", "purpose": "Default easing for reveals and transitions. No bounce, no elastic." },
+      { "name": "ease-out-quint", "value": "cubic-bezier(0.22, 1, 0.36, 1)", "purpose": "Softer alternative for micro-interactions and state changes." },
+      { "name": "dur-micro", "value": "150ms", "purpose": "Hover, focus, selection feedback." },
+      { "name": "dur-standard", "value": "280ms", "purpose": "Question advance, tile transitions, button state." },
+      { "name": "dur-reveal-beat", "value": "700ms", "purpose": "One staggered beat of the passport reveal choreography (type settles, color floods, grain resolves)." }
+    ],
+    "breakpoints": [
+      { "name": "sm", "value": "480px" },
+      { "name": "md", "value": "768px" },
+      { "name": "lg", "value": "1024px" }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "The one call to action on a chrome screen. Signal Flare, short Martian Mono label.",
+      "html": "<button class=\"ds-btn-primary\">FIND MY TEAM</button>",
+      "css": ".ds-btn-primary { font-family: 'Martian Mono', ui-monospace, monospace; font-size: 0.75rem; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: oklch(18% 0.012 65); background: oklch(67% 0.21 35); border: none; border-radius: 12px; padding: 18px 36px; cursor: pointer; transition: background 200ms cubic-bezier(0.16,1,0.3,1), transform 200ms cubic-bezier(0.16,1,0.3,1), box-shadow 200ms cubic-bezier(0.16,1,0.3,1); } .ds-btn-primary:hover { background: oklch(58% 0.20 32); transform: translateY(-2px); box-shadow: 0 8px 40px oklch(67% 0.21 35 / 0.35); } .ds-btn-primary:focus-visible { outline: 2px solid oklch(67% 0.21 35); outline-offset: 3px; } .ds-btn-primary:active { transform: translateY(0); }"
+    },
+    {
+      "name": "Ghost Button",
+      "kind": "button",
+      "refersTo": "button-ghost",
+      "description": "Secondary actions: download, skip, back. Bordered, transparent.",
+      "html": "<button class=\"ds-btn-ghost\">DOWNLOAD</button>",
+      "css": ".ds-btn-ghost { font-family: 'Martian Mono', ui-monospace, monospace; font-size: 0.75rem; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: oklch(92% 0.008 80); background: transparent; border: 1px solid oklch(34% 0.012 65); border-radius: 12px; padding: 18px 36px; cursor: pointer; transition: background 200ms cubic-bezier(0.16,1,0.3,1), border-color 200ms cubic-bezier(0.16,1,0.3,1); } .ds-btn-ghost:hover { background: oklch(23% 0.013 65); border-color: oklch(62% 0.01 70); } .ds-btn-ghost:focus-visible { outline: 2px solid oklch(67% 0.21 35); outline-offset: 3px; }"
+    },
+    {
+      "name": "Answer Tile",
+      "kind": "chip",
+      "refersTo": "chip-answer",
+      "description": "A full-width editorial choice row in the quiz. Large tap target, text-led, never an icon grid.",
+      "html": "<button class=\"ds-chip-answer\">The underdog with a story</button>",
+      "css": ".ds-chip-answer { display: block; width: 100%; text-align: left; min-height: 56px; font-family: 'Hanken Grotesk', 'Noto Sans', sans-serif; font-size: clamp(1.25rem, 4vw, 1.75rem); font-weight: 600; line-height: 1.1; color: oklch(92% 0.008 80); background: oklch(23% 0.013 65); border: 1px solid oklch(34% 0.012 65); border-radius: 12px; padding: 20px 24px; cursor: pointer; transition: color 150ms cubic-bezier(0.16,1,0.3,1), box-shadow 150ms cubic-bezier(0.16,1,0.3,1), background 150ms cubic-bezier(0.16,1,0.3,1); } .ds-chip-answer:hover { background: oklch(27% 0.013 65); } .ds-chip-answer[aria-pressed=\"true\"] { color: oklch(97% 0.006 85); box-shadow: inset 0 0 0 2px oklch(67% 0.21 35); } .ds-chip-answer:focus-visible { outline: 2px solid oklch(67% 0.21 35); outline-offset: 3px; }"
+    },
+    {
+      "name": "Email Field",
+      "kind": "input",
+      "refersTo": "input-email",
+      "description": "The optional 'save your passport' upgrade. Quiet by default, never a gate.",
+      "html": "<input class=\"ds-input-email\" type=\"email\" placeholder=\"you@email.com\" aria-label=\"Email to save your passport\" />",
+      "css": ".ds-input-email { font-family: 'Hanken Grotesk', 'Noto Sans', sans-serif; font-size: 1.0625rem; color: oklch(92% 0.008 80); background: oklch(23% 0.013 65); border: 1px solid oklch(34% 0.012 65); border-radius: 12px; padding: 16px 18px; width: 100%; transition: border-color 150ms cubic-bezier(0.16,1,0.3,1), box-shadow 150ms cubic-bezier(0.16,1,0.3,1); } .ds-input-email::placeholder { color: oklch(62% 0.01 70); } .ds-input-email:focus { outline: none; border-color: oklch(67% 0.21 35); box-shadow: 0 0 0 2px oklch(67% 0.21 35 / 0.4); }"
+    },
+    {
+      "name": "Supporter Passport (signature)",
+      "kind": "custom",
+      "refersTo": null,
+      "description": "The drenched 9:16 poster the whole product compresses into. Nation duotone floods the surface; Tusker name towers; Martian Mono data band reads like a ticket stub.",
+      "html": "<article class=\"ds-passport\" style=\"--nation-primary: oklch(72% 0.13 230); --nation-deep: oklch(30% 0.07 245); --nation-glow: oklch(88% 0.08 215);\"><div class=\"ds-passport-grain\"></div><div class=\"ds-passport-body\"><span class=\"ds-passport-kicker\">THE STREET POETS</span><h1 class=\"ds-passport-name\">ARGENTINA</h1><div class=\"ds-passport-stub\"><span>NO. 04127</span><span>GROUP C</span><span>PASSION 92</span></div></div></article>",
+      "css": ".ds-passport { position: relative; aspect-ratio: 9 / 16; width: 320px; max-width: 100%; overflow: hidden; border-radius: 20px; background: radial-gradient(120% 90% at 50% 18%, var(--nation-primary), var(--nation-deep) 70%); box-shadow: 0 24px 120px var(--nation-primary); } .ds-passport-grain { position: absolute; inset: 0; pointer-events: none; opacity: 0.10; background-image: radial-gradient(oklch(100% 0 0) 0.5px, transparent 0.5px); background-size: 3px 3px; mix-blend-mode: overlay; } .ds-passport::after { content: ''; position: absolute; inset: 0; pointer-events: none; box-shadow: inset 0 0 140px 30px oklch(18% 0.012 65 / 0.55); } .ds-passport-body { position: relative; height: 100%; display: flex; flex-direction: column; justify-content: flex-end; padding: 28px 24px; } .ds-passport-kicker { font-family: 'Martian Mono', ui-monospace, monospace; font-size: 0.7rem; font-weight: 500; letter-spacing: 0.16em; text-transform: uppercase; color: var(--nation-glow); } .ds-passport-name { font-family: 'Tusker Grotesk', 'Arial Narrow', sans-serif; font-weight: 600; font-size: clamp(3.5rem, 22vw, 5.5rem); line-height: 0.86; letter-spacing: -0.01em; text-transform: uppercase; color: var(--nation-glow); margin: 4px 0 18px; } .ds-passport-stub { display: flex; gap: 14px; flex-wrap: wrap; padding: 12px 14px; border-radius: 12px; background: oklch(18% 0.012 65 / 0.28); backdrop-filter: blur(8px); border: 1px solid oklch(92% 0.008 80 / 0.18); font-family: 'Martian Mono', ui-monospace, monospace; font-size: 0.65rem; letter-spacing: 0.1em; color: oklch(92% 0.008 80); }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Terrace Cinema",
+    "overview": "Bandwagon is where the football terrace meets the movie poster. The terrace gives it warmth, noise, and belonging; the cinema gives it scale, darkness, and the held breath before the reveal. The whole system lives in a warm cinema-black room, and every path through it ends on one screen: a Supporter Passport so big and so drenched in your nation's color that posting it feels like releasing a poster for the team you just joined. The chrome is the dim warm lobby (cinema-black, one Signal Flare accent, towering condensed type); the passport is the screen (a nation's duotone floods the surface, the country name stands monumentally tall, the data reads like a ticket stub). Two rooms, one building; the lobby never competes with the screen.",
+    "keyCharacteristics": [
+      "Warm cinema-black world, dark-mode-first, never pure black or pure white.",
+      "Two-register split: restrained Committed chrome, fully Drenched per-nation passport.",
+      "Towering condensed display type as the dominant visual force.",
+      "The artifact is the product: every flow ends in a screenshot-worthy poster.",
+      "Choreographed reveal (suspense, then identity, then pride), all on ease-out-expo.",
+      "Every nation hero-worthy: the design dignifies debutants and giants alike."
+    ],
+    "rules": [
+      { "name": "The Two Rooms Rule", "body": "The chrome is the lobby; the passport is the screen. Signal Flare lives in the lobby and is forbidden on the passport hero. The nation duotone lives on the screen and is forbidden as chrome decoration.", "section": "colors" },
+      { "name": "The Drench Rule", "body": "On the passport, the nation does not get a stripe, a badge, or a corner. It gets the whole surface. Nation Deep floods the full bleed; Nation Primary and Glow carry the type.", "section": "colors" },
+      { "name": "The Flare Rarity Rule", "body": "Signal Flare covers a small fraction of any chrome screen. Its scarcity is what makes the CTA read as the one thing to do.", "section": "colors" },
+      { "name": "The Monument Rule", "body": "The nation name is always the biggest thing on screen and always Tusker. It does not share the stage with another element at the same scale.", "section": "typography" },
+      { "name": "The Solid-Color Rule", "body": "Type is one solid color, always. Gradient text is forbidden. Emphasis comes from scale, weight, and color choice.", "section": "typography" },
+      { "name": "The No-Box-Shadow Rule", "body": "Gray drop shadows are forbidden. Depth is grain, vignette, tonal layering, and colored bloom. The only shadows permitted are the flare bloom and the nation bloom, and only on a hero moment.", "section": "elevation" }
+    ],
+    "dos": [
+      "Do drench the passport in the nation's duotone (Nation Deep full bleed, Nation Primary and Glow type). The whole surface, never a stripe or a corner.",
+      "Do set the nation name monumentally in Tusker Grotesk as the largest element on screen.",
+      "Do keep Signal Flare to the chrome and scarce (the One CTA), and keep the nation duotone to the passport.",
+      "Do render supporter traits as editorial count-up numerals woven into the poster.",
+      "Do use OKLCH and tint every neutral warm; pair every flag color with the nation name, crest, and a text label so meaning never rests on color alone (WCAG 2.2 AA).",
+      "Do honor prefers-reduced-motion: the suspense loader, confetti, count-ups, and tilt all collapse to a dignified instant state.",
+      "Do animate only transform and opacity, on ease-out-expo / quint, no bounce."
+    ],
+    "donts": [
+      "Don't make a cheesy BuzzFeed quiz: no clip-art, no stock photography, no low-rent quiz-site chrome.",
+      "Don't drift into the corporate, sterile official-FIFA-app register.",
+      "Don't borrow sportsbook sleaze: no neon-on-black odds-board energy, no aggressive 'bet now'.",
+      "Don't ship generic SaaS or AI-startup tropes: no gradient blobs, no identical icon-card grids, no big-number hero-metric template.",
+      "Don't use gradient text (background-clip: text), ever. One solid color.",
+      "Don't use border-left or border-right greater than 1px as a colored accent stripe.",
+      "Don't use glassmorphism as a default surface. The only sanctioned glass is the passport's ticket-stub data band.",
+      "Don't use gray drop shadows. Depth is grain, vignette, tonal layering, and colored bloom only.",
+      "Don't use #000, #fff, or Inter. Warm cinema-black neutrals and the Stadium type system instead.",
+      "Don't use em dashes (or --) in any UI copy."
+    ]
+  }
+}
