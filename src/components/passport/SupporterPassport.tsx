@@ -3,7 +3,7 @@ import { motion, useReducedMotion, type Transition } from 'framer-motion'
 import NumberFlow from '@number-flow/react'
 import type { PassportData } from '../../lib/passport'
 import { TRAIT_KEYS, type TraitKey, type Traits } from '../../lib/traits'
-import { whenDisplayFontReady } from './exportPassport'
+import { fitNameToWidth, whenDisplayFontReady } from './exportPassport'
 import './passport.css'
 
 const TRAIT_LABEL: Record<TraitKey, string> = {
@@ -37,25 +37,7 @@ function useFitText(text: string) {
   useLayoutEffect(() => {
     const el = ref.current
     if (!el) return
-    const fit = () => {
-      const parent = el.parentElement
-      if (!parent) return
-      const cs = getComputedStyle(parent)
-      const avail = parent.clientWidth - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight)
-      if (avail <= 0) return
-      el.style.fontSize = '240px'
-      const natural = el.scrollWidth
-      if (natural <= 0) return
-      let size = Math.min(240, (avail / natural) * 240)
-      el.style.fontSize = `${size}px`
-      // Second pass: measure the ACTUAL rendered width at this size (the first
-      // estimate can be off if a fallback font was active) and shrink to fit.
-      const rendered = el.scrollWidth
-      if (rendered > avail) {
-        size *= avail / rendered
-        el.style.fontSize = `${size}px`
-      }
-    }
+    const fit = () => fitNameToWidth(el)
     fit()
     const ro = new ResizeObserver(fit)
     ro.observe(el.parentElement ?? el)

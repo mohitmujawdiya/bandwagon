@@ -17,22 +17,54 @@ export function whenDisplayFontReady(): Promise<unknown> {
   ])
 }
 
-/** Wait for the display font and a couple of frames so fit-to-width has settled. */
-async function waitForRenderReady() {
-  await whenDisplayFontReady()
-  // Let the component's own font-driven re-fit (a microtask) apply before we
-  // measure/capture, then flush layout over two frames.
-  await new Promise<void>((resolve) => setTimeout(resolve, 90))
+/**
+ * Size a nation-name element to span its container on one line. Two passes: the
+ * first estimates from a 240px measurement, the second measures the ACTUAL
+ * rendered width and shrinks to fit (correcting for whatever font is active).
+ * Shared by the on-screen component and the export so they never disagree.
+ */
+export function fitNameToWidth(el: HTMLElement) {
+  const parent = el.parentElement
+  if (!parent) return
+  const cs = getComputedStyle(parent)
+  const avail = parent.clientWidth - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight)
+  if (avail <= 0) return
+  el.style.fontSize = '240px'
+  const natural = el.scrollWidth
+  if (natural <= 0) return
+  const size = Math.min(240, (avail / natural) * 240)
+  el.style.fontSize = `${size}px`
+  const rendered = el.scrollWidth
+  if (rendered > avail) el.style.fontSize = `${size * (avail / rendered)}px`
+}
+
+async function nextFrame() {
   await new Promise<void>((resolve) =>
     requestAnimationFrame(() => requestAnimationFrame(() => resolve())),
   )
+}
+
+/**
+ * Prepare a passport node for capture: confirm the display font, then re-fit the
+ * masthead directly (so it never relies on the component's internal fit timing,
+ * which can race the font load on a cold page), and flush layout.
+ */
+async function prepareForCapture(node: HTMLElement) {
+  await whenDisplayFontReady()
+  const name = node.querySelector('.passport__name') as HTMLElement | null
+  // Fit, advance a frame, fit again: the second pass catches a font that only
+  // became active across the frame boundary. Then flush once more before capture.
+  if (name) fitNameToWidth(name)
+  await nextFrame()
+  if (name) fitNameToWidth(name)
+  await nextFrame()
 }
 
 const OPTS = { pixelRatio: 1, cacheBust: true } as const
 
 export async function capturePassportBlob(node: HTMLElement): Promise<Blob> {
   const { toBlob } = await import('html-to-image')
-  await waitForRenderReady()
+  await prepareForCapture(node)
   const blob = await toBlob(node, OPTS)
   if (!blob) throw new Error('Export produced no image')
   return blob
@@ -40,7 +72,7 @@ export async function capturePassportBlob(node: HTMLElement): Promise<Blob> {
 
 export async function capturePassportDataUrl(node: HTMLElement): Promise<string> {
   const { toPng } = await import('html-to-image')
-  await waitForRenderReady()
+  await prepareForCapture(node)
   return toPng(node, OPTS)
 }
 
