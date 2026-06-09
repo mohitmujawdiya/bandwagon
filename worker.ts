@@ -26,6 +26,11 @@ import { runJob } from './src/jobs.js'
 import { schemas } from './src/schemas.js'
 import { integrations } from './src/integrations.js'
 import { registerAiChatRoutes } from './src/ai/chat-routes.js'
+import { assignNation, type QuizAnswers } from './src/lib/assign.js'
+import { buildVerdict } from './src/lib/verdict.js'
+import { computeTraits } from './src/lib/traits.js'
+import { rarityOf } from './src/lib/passport.js'
+import { shortId } from './src/lib/passport-record.js'
 
 // =============================================================================
 // DO Manifest — declares all Durable Objects for dynamic deploy bindings
@@ -572,6 +577,69 @@ app.post('/api/actions/:name', async (c) => {
   const tools = createActionTools(c.env, auth.userId, callerJwt)
   const result = await action({ userId: auth.userId, params, tools, env: c.env, callerJwt })
   return c.json(result as unknown as Record<string, unknown>)
+})
+
+// ---------------------------------------------------------------------------
+// Passport creation — UNAUTHENTICATED, app-identity write.
+//
+// Anonymous clients connect as read-only 'viewers' and cannot write to the data
+// layer, so the passport (and its supporter-counter bump) is written here as the
+// app via the X-App-Action internal tools call (RBAC bypass). This preserves the
+// no-sign-in-gate flow. The verdict is the free template for now (no per-call AI
+// cost); a Haiku upgrade slots in here later behind rate-limiting.
+// ---------------------------------------------------------------------------
+
+app.post('/api/passport/create', async (c) => {
+  const body = await c.req.json<{ quizAnswers?: QuizAnswers }>().catch(() => null)
+  const answers = body?.quizAnswers
+  if (!answers || typeof answers !== 'object') {
+    return c.json({ success: false, error: 'Missing quizAnswers' }, 400)
+  }
+
+  const stub = c.env.RECORD_ROOMS.get(c.env.RECORD_ROOMS.idFromName(`app:${c.env.APP_NAME}`))
+  async function exec(tool: string, params: Record<string, unknown>) {
+    const res = await stub.fetch(new Request('https://internal/api/tools/execute', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'X-User-Id': 'app', 'X-App-Action': 'true' },
+      body: JSON.stringify({ tool, params }),
+    }))
+    return res.json() as Promise<{
+      success: boolean
+      data?: { records?: Array<{ recordId: string; data: { count?: number } }>; recordId?: string }
+      error?: string
+    }>
+  }
+
+  const { nation } = assignNation(answers)
+
+  // Bump the per-nation supporter counter (server-side; read-modify-write).
+  const statsQ = await exec('records.query', { collection: 'nationStats', where: { nationCode: nation.code } })
+  const statRec = statsQ.success ? statsQ.data?.records?.[0] : undefined
+  const supporterNumber = (statRec?.data.count ?? 0) + 1
+  if (statRec) {
+    await exec('records.update', { collection: 'nationStats', recordId: statRec.recordId, data: { count: supporterNumber } })
+  } else {
+    await exec('records.create', { collection: 'nationStats', data: { nationCode: nation.code, count: supporterNumber } })
+  }
+
+  const shareId = shortId()
+  const created = await exec('records.create', {
+    collection: 'passports',
+    data: {
+      shareId,
+      nationCode: nation.code,
+      nickname: nation.nickname,
+      verdict: buildVerdict(nation, answers),
+      verdictSource: 'fallback',
+      traits: computeTraits(nation, answers),
+      rarity: rarityOf(nation),
+      group: nation.group,
+      supporterNumber,
+      quizAnswers: answers,
+    },
+  })
+  if (!created.success) return c.json({ success: false, error: created.error ?? 'create failed' }, 500)
+  return c.json({ success: true, shareId })
 })
 
 // ---------------------------------------------------------------------------
