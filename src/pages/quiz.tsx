@@ -90,12 +90,11 @@ export default function Quiz() {
           <span className="quiz__kicker">{q.kicker}</span>
           <h1 className="quiz__prompt">{q.prompt}</h1>
 
-          <div className="quiz__options" role="list">
+          <div className="quiz__options">
             {q.options.map((o, i) => (
               <motion.button
                 key={o.label}
                 className="quiz__option"
-                role="listitem"
                 onClick={() => pick(o.patch)}
                 initial={reduced ? false : { opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
