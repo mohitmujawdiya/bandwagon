@@ -10,7 +10,7 @@ import { Button } from '../components/ui'
 import type { QuizAnswers } from '../lib/assign'
 
 const NEUTRAL: QuizAnswers = {
-  heritage: null, underdog: 0, playstyle: null, region: null, rivalCode: null, energy: null,
+  heritage: null, underdog: 0, playstyle: null, archetype: null, rivalCode: null, energy: null,
 }
 
 const CODES = ['ARG', 'BRA', 'MEX', 'MAR', 'FRA', 'CIV', 'GHA', 'CUW', 'SUI', 'NED', 'KSA', 'BIH']
@@ -109,10 +109,10 @@ function CreateTestPassport() {
   const [busy, setBusy] = useState(false)
 
   const samples: QuizAnswers[] = [
-    { heritage: null, underdog: 2, playstyle: 'flair', region: 'africa', rivalCode: null, energy: 'joyful' },
-    { heritage: 'mexico', underdog: 0, playstyle: null, region: null, rivalCode: null, energy: 'passionate' },
-    { heritage: null, underdog: -2, region: 'europe', playstyle: 'technical', rivalCode: null, energy: 'cool' },
-    { heritage: 'south-america', underdog: 1, playstyle: 'flair', region: null, rivalCode: null, energy: 'passionate' },
+    { heritage: null, underdog: 2, playstyle: 'flair', archetype: 'party', rivalCode: null, energy: 'joyful' },
+    { heritage: 'mexico', underdog: 0, playstyle: null, archetype: null, rivalCode: null, energy: 'passionate' },
+    { heritage: null, underdog: -2, archetype: 'champion', playstyle: 'technical', rivalCode: null, energy: 'cool' },
+    { heritage: 'south-america', underdog: 1, playstyle: 'flair', archetype: null, rivalCode: null, energy: 'passionate' },
   ]
 
   async function make() {

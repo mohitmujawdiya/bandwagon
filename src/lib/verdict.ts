@@ -28,10 +28,10 @@ const OPENERS: Record<string, Bank> = {
     'Style first. You were clear about that.',
     'You picked a way to play, then found a country doing it.',
   ],
-  region: [
-    'Your compass only pointed one way.',
-    'You knew which corner of the world to face.',
-    'Geography, meet destiny.',
+  archetype: [
+    'You told us how the story ends.',
+    'You came in with an ending in mind.',
+    'You picked your kind of glory, and here it is.',
   ],
   energy: [
     'You match their pulse.',
@@ -90,7 +90,7 @@ function dominantReason(answers: QuizAnswers): keyof typeof OPENERS {
   if (answers.underdog > 0) return 'underdogLover'
   if (answers.underdog < 0) return 'juggernautLover'
   if (answers.playstyle) return 'playstyle'
-  if (answers.region) return 'region'
+  if (answers.archetype) return 'archetype'
   if (answers.energy) return 'energy'
   return 'default'
 }

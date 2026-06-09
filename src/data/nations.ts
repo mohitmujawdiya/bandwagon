@@ -8,16 +8,16 @@
 //
 // underdogScore: 0 = global juggernaut, 100 = pure debutant underdog.
 
-import type { Nation } from './types'
+import type { Nation, Archetype } from './types'
 
-export const NATIONS: Nation[] = [
+const RAW: Omit<Nation, 'archetype'>[] = [
   // ---- Group A ----
   {
     code: 'MEX', name: 'Mexico', flagEmoji: '🇲🇽', group: 'A',
     confederation: 'CONCACAF', region: 'north-america', nickname: 'El Tri',
     accent: { hue: 150, chroma: 0.15, lightness: 0.58 }, underdogScore: 35,
     playstyles: ['attacking', 'technical', 'flair'], energy: ['passionate', 'joyful'],
-    heritageTags: ['mexico', 'central-america', 'north-america'], rivals: ['USA'],
+    heritageTags: ['mexico', 'central-america'], rivals: ['USA'],
     stars: ['Santiago Giménez', 'Edson Álvarez', 'Raúl Jiménez'],
   },
   {
@@ -419,6 +419,38 @@ export const NATIONS: Nation[] = [
     stars: ['Adalberto Carrasquilla', 'Michael Murillo', 'José Fajardo'],
   },
 ]
+
+// Narrative archetype per nation — the prestige/expectation axis behind the
+// "how does your World Cup end?" question. Authored from WC2026 pedigree:
+// champions are the genuine title favorites; contenders carry real pedigree but
+// a history of heartbreak; dark-horses are the scrappy giant-killers; party
+// teams are debutants and minnows here for the joy. This is what lets the quiz
+// reach the favorites (e.g. France, Belgium) that no other signal surfaces.
+const ARCHETYPE: Record<string, Archetype> = {
+  // Champions — lifting the trophy
+  BRA: 'champion', ARG: 'champion', FRA: 'champion', ESP: 'champion',
+  ENG: 'champion', GER: 'champion', POR: 'champion', NED: 'champion',
+  // Contenders — a heroic run that ends in tears
+  BEL: 'contender', URU: 'contender', COL: 'contender', CRO: 'contender',
+  SUI: 'contender', JPN: 'contender', MEX: 'contender',
+  // Dark-horses — one impossible night
+  KOR: 'dark-horse', CZE: 'dark-horse', CAN: 'dark-horse', MAR: 'dark-horse',
+  USA: 'dark-horse', AUS: 'dark-horse', TUR: 'dark-horse', CIV: 'dark-horse',
+  ECU: 'dark-horse', SWE: 'dark-horse', EGY: 'dark-horse', IRN: 'dark-horse',
+  SEN: 'dark-horse', NOR: 'dark-horse', ALG: 'dark-horse', AUT: 'dark-horse',
+  GHA: 'dark-horse',
+  // Party — dancing in the stands
+  RSA: 'party', BIH: 'party', QAT: 'party', HAI: 'party', SCO: 'party',
+  PAR: 'party', CUW: 'party', TUN: 'party', NZL: 'party', CPV: 'party',
+  KSA: 'party', IRQ: 'party', JOR: 'party', COD: 'party', UZB: 'party',
+  PAN: 'party',
+}
+
+export const NATIONS: Nation[] = RAW.map((n) => {
+  const archetype = ARCHETYPE[n.code]
+  if (!archetype) throw new Error(`nations.ts: missing archetype for ${n.code}`)
+  return { ...n, archetype }
+})
 
 /** Fast lookup by code. */
 export const NATION_BY_CODE: Record<string, Nation> = Object.fromEntries(

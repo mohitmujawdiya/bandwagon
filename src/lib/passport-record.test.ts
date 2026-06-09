@@ -5,7 +5,7 @@ import { NATION_BY_CODE } from '../data/nations'
 import type { QuizAnswers } from './assign'
 
 const answers: QuizAnswers = {
-  heritage: 'mexico', underdog: 0, playstyle: null, region: null, rivalCode: null, energy: 'passionate',
+  heritage: 'mexico', underdog: 0, playstyle: null, archetype: null, rivalCode: null, energy: 'passionate',
 }
 
 const record: PassportRecord = {

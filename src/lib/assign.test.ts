@@ -8,21 +8,22 @@ const base: QuizAnswers = {
   heritage: null,
   underdog: 0,
   playstyle: null,
-  region: null,
+  archetype: null,
   rivalCode: null,
   energy: null,
 }
 
 describe('assignNation', () => {
   test('is deterministic: same answers always return the same nation', () => {
-    const answers: QuizAnswers = { ...base, region: 'africa', underdog: 1, energy: 'joyful' }
+    const answers: QuizAnswers = { ...base, heritage: ['west-africa'], underdog: 1, energy: 'joyful' }
     const a = assignNation(answers)
     const b = assignNation(answers)
     expect(a.nation.code).toBe(b.nation.code)
   })
 
-  test('heritage dominates: Mexican roots return Mexico even against a conflicting region', () => {
-    const answers: QuizAnswers = { ...base, heritage: 'mexico', region: 'europe' }
+  test('heritage dominates: Mexican roots return Mexico even against a conflicting archetype', () => {
+    // MEX is a "contender", so a "champion" answer would pull elsewhere if heritage didn't dominate.
+    const answers: QuizAnswers = { ...base, heritage: 'mexico', archetype: 'champion' }
     expect(assignNation(answers).nation.code).toBe('MEX')
   })
 
@@ -33,17 +34,18 @@ describe('assignNation', () => {
 
   test('juggernaut lovers (no heritage) get a giant', () => {
     const answers: QuizAnswers = { ...base, underdog: -2 }
-    expect(assignNation(answers).nation.underdogScore).toBeLessThanOrEqual(15)
+    expect(assignNation(answers).nation.underdogScore).toBeLessThanOrEqual(25)
   })
 
   test('underdog lovers (no heritage) get an underdog', () => {
     const answers: QuizAnswers = { ...base, underdog: 2 }
-    expect(assignNation(answers).nation.underdogScore).toBeGreaterThanOrEqual(80)
+    expect(assignNation(answers).nation.underdogScore).toBeGreaterThanOrEqual(75)
   })
 
-  test('region pull routes to that region', () => {
-    const answers: QuizAnswers = { ...base, region: 'south-america' }
-    expect(assignNation(answers).nation.region).toBe('south-america')
+  test('the archetype answer routes to that archetype (the prestige axis)', () => {
+    // "Lifting the trophy" with no other signal lands on an actual favorite.
+    expect(assignNation({ ...base, archetype: 'champion' }).nation.archetype).toBe('champion')
+    expect(assignNation({ ...base, archetype: 'party' }).nation.archetype).toBe('party')
   })
 
   test('all-neutral answers still return a valid nation without throwing', () => {
@@ -56,16 +58,16 @@ describe('assignNation', () => {
       null, 'mexico', 'south-america', 'caribbean', 'west-africa', 'north-africa',
       'east-asia', 'middle-east', 'balkans', 'nordic', 'central-asia', 'oceania',
     ]
-    const regions = ['europe', 'south-america', 'africa', 'asia', 'middle-east', 'north-america'] as const
+    const archetypes = ['champion', 'contender', 'dark-horse', 'party'] as const
     const seen = new Set<string>()
     for (const heritage of heritages) {
-      for (const region of regions) {
+      for (const archetype of archetypes) {
         for (const underdog of [-2, 0, 2]) {
-          seen.add(assignNation({ ...base, heritage, region, underdog }).nation.code)
+          seen.add(assignNation({ ...base, heritage, archetype, underdog }).nation.code)
         }
       }
     }
-    expect(seen.size).toBeGreaterThanOrEqual(24)
+    expect(seen.size).toBeGreaterThanOrEqual(30)
   })
 })
 

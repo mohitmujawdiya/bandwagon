@@ -5,7 +5,7 @@ import type { QuizAnswers } from './assign'
 import { NATION_BY_CODE } from '../data/nations'
 
 const answers: QuizAnswers = {
-  heritage: 'west-africa', underdog: 1, playstyle: 'attacking', region: 'africa', rivalCode: null, energy: 'joyful',
+  heritage: 'west-africa', underdog: 1, playstyle: 'attacking', archetype: 'dark-horse', rivalCode: null, energy: 'joyful',
 }
 const SEN = NATION_BY_CODE.SEN
 

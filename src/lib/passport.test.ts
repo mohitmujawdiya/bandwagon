@@ -5,7 +5,7 @@ import type { QuizAnswers } from './assign'
 import { NATION_BY_CODE } from '../data/nations'
 
 const base: QuizAnswers = {
-  heritage: null, underdog: 0, playstyle: null, region: null, rivalCode: null, energy: null,
+  heritage: null, underdog: 0, playstyle: null, archetype: null, rivalCode: null, energy: null,
 }
 
 describe('rarityOf', () => {
@@ -35,7 +35,7 @@ describe('buildPassport', () => {
   })
 
   test('the placeholder supporter number is deterministic per answer set', () => {
-    const a: QuizAnswers = { ...base, region: 'europe', underdog: -1 }
+    const a: QuizAnswers = { ...base, archetype: 'champion', underdog: -1 }
     expect(buildPassport(a).supporterNumber).toBe(buildPassport(a).supporterNumber)
   })
 })

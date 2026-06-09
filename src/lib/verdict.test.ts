@@ -4,7 +4,7 @@ import type { QuizAnswers } from './assign'
 import { NATION_BY_CODE } from '../data/nations'
 
 const base: QuizAnswers = {
-  heritage: null, underdog: 0, playstyle: null, region: null, rivalCode: null, energy: null,
+  heritage: null, underdog: 0, playstyle: null, archetype: null, rivalCode: null, energy: null,
 }
 
 describe('buildVerdict (templated fallback)', () => {
@@ -32,7 +32,7 @@ describe('buildVerdict (templated fallback)', () => {
 
   test('stays short enough for the passport (<= 260 chars)', () => {
     for (const n of Object.values(NATION_BY_CODE)) {
-      expect(buildVerdict(n, { ...base, underdog: 1, region: n.region }).length).toBeLessThanOrEqual(260)
+      expect(buildVerdict(n, { ...base, underdog: 1, archetype: n.archetype }).length).toBeLessThanOrEqual(260)
     }
   })
 

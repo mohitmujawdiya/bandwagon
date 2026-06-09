@@ -4,7 +4,7 @@ import type { QuizAnswers } from './assign'
 import { NATION_BY_CODE } from '../data/nations'
 
 const base: QuizAnswers = {
-  heritage: null, underdog: 0, playstyle: null, region: null, rivalCode: null, energy: null,
+  heritage: null, underdog: 0, playstyle: null, archetype: null, rivalCode: null, energy: null,
 }
 
 describe('computeTraits', () => {

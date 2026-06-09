@@ -37,7 +37,7 @@ export type Playstyle =
   | 'flair'
   | 'direct'
 
-// Personality/energy — the final question maps onto these.
+// Personality/energy — the match-day-feeling question maps onto these.
 export type Energy =
   | 'joyful'
   | 'passionate'
@@ -47,6 +47,15 @@ export type Energy =
   | 'romantic'
   | 'gritty'
   | 'fearless'
+
+// Narrative archetype — the "how does your World Cup end?" question maps onto
+// these. This is the prestige/expectation axis: it's the only signal that tells
+// favorites from minnows, so it's what makes the giants reachable.
+export type Archetype =
+  | 'champion'   // lifting the trophy — the genuine title favorites
+  | 'contender'  // a heroic run that ends in tears — pedigree, perennial heartbreak
+  | 'dark-horse' // one impossible night — the scrappy giant-killers
+  | 'party'      // dancing in the stands — debutants and minnows, here for the joy
 
 // Heritage / roots keys. The heritage question offers friendly groupings that
 // resolve to one or more of these; a nation carries every key its diaspora
@@ -92,6 +101,8 @@ export interface Nation {
   accent: Accent
   /** 0-100, higher = more of an underdog. Drives the underdog-vs-juggernaut question. */
   underdogScore: number
+  /** Narrative archetype — drives the "how does your World Cup end?" question. */
+  archetype: Archetype
   playstyles: Playstyle[]
   energy: Energy[]
   heritageTags: HeritageKey[]
