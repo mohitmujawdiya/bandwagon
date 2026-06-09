@@ -224,9 +224,15 @@
 .how {
   max-width: 1080px;
   margin: 0 auto;
-  /* Extra top padding clears the stack's bottom card, which overflows the hero
-   * stage (absolutely-positioned, so the layout doesn't reserve its height). */
-  padding: clamp(64px, 11vw, 124px) clamp(20px, 5vw, 56px) clamp(40px, 7vw, 88px);
+  /* Single-column only: extra top padding clears the stack's bottom card, which
+   * overflows the hero stage (absolutely positioned). On the 2-column hero the
+   * stack is in its own column and doesn't crowd this section (see below). */
+  padding: clamp(64px, 8vw, 96px) clamp(20px, 5vw, 56px) clamp(40px, 7vw, 88px);
+}
+@media (min-width: 920px) {
+  .how {
+    padding-top: clamp(40px, 7vw, 88px); /* desktop: restore the normal rhythm */
+  }
 }
 .how__eyebrow {
   font-family: var(--font-mono);
