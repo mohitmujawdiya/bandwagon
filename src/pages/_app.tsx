@@ -15,10 +15,12 @@ import { APP_NAME, SCOPE_ID } from '../constants'
 import { schemas } from '../schemas'
 
 export default function App() {
-  // The quiz and the passport reveal are full-bleed cinematic surfaces — hide
-  // the app nav on them (the sanctioned useLocation pattern).
+  // The landing, quiz, and passport reveal are full-bleed cinematic surfaces —
+  // hide the app nav on them (the sanctioned useLocation pattern). The landing
+  // carries its own minimal wordmark header.
   const path = useLocation().pathname
-  const immersive = path.startsWith('/quiz') || path.startsWith('/p/')
+  const immersive =
+    path === '/' || path.startsWith('/home') || path.startsWith('/quiz') || path.startsWith('/p/')
 
   return (
     <ToastProvider>

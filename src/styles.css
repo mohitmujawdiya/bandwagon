@@ -119,6 +119,31 @@
   --color-info-border: rgba(59, 130, 246, 0.4);
 }
 
+/*
+ * Brand tokens as plain custom properties.
+ *
+ * Tailwind v4 tree-shakes @theme tokens that no utility class references. Our
+ * co-located CSS (home.css, quiz.css, passport.css) consumes these via var()
+ * rather than as Tailwind utilities, so the @theme copies get dropped from
+ * :root and var() silently resolves to nothing. Declaring them here guarantees
+ * resolution everywhere. Keep values in sync with the @theme block above.
+ */
+:root {
+  --color-cinema-black: oklch(0.18 0.012 65);
+  --color-cinema-raise: oklch(0.23 0.013 65);
+  --color-cinema-line: oklch(0.34 0.012 65);
+  --color-ash: oklch(0.62 0.01 70);
+  --color-bone: oklch(0.92 0.008 80);
+  --color-floodlight: oklch(0.97 0.006 85);
+  --color-signal-flare: oklch(0.67 0.21 35);
+  --color-flare-deep: oklch(0.58 0.2 32);
+  --font-display: 'Anton', 'Arial Narrow', 'Roboto Condensed', sans-serif;
+  --font-body: 'Hanken Grotesk', 'Noto Sans', 'Helvetica Neue', Arial, sans-serif;
+  --font-mono: 'Martian Mono', ui-monospace, 'SF Mono', 'Roboto Mono', monospace;
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-out-quint: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
 /* Theme override blocks live in `themes.css` — imported above. */
 
 /*
