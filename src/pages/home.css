@@ -224,7 +224,9 @@
 .how {
   max-width: 1080px;
   margin: 0 auto;
-  padding: clamp(40px, 7vw, 88px) clamp(20px, 5vw, 56px);
+  /* Extra top padding clears the stack's bottom card, which overflows the hero
+   * stage (absolutely-positioned, so the layout doesn't reserve its height). */
+  padding: clamp(64px, 11vw, 124px) clamp(20px, 5vw, 56px) clamp(40px, 7vw, 88px);
 }
 .how__eyebrow {
   font-family: var(--font-mono);
