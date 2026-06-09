@@ -9,6 +9,7 @@ export type Path =
   | `/home`
   | `/p/:id`
   | `/preview`
+  | `/quiz`
   | `/settings`
 
 export type Params = {

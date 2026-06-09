@@ -1,0 +1,209 @@
+/* The quiz funnel — full-bleed, cinema-black, one question at a time. Per
+ * DESIGN.md: warm cinema neutrals, Signal Flare only on the progress + tap
+ * state, big editorial answer tiles (never an icon grid). */
+
+.quiz {
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+  padding: clamp(16px, 4vw, 28px);
+  font-family: var(--font-body);
+}
+.quiz--center {
+  align-items: center;
+  justify-content: center;
+}
+
+/* Top rail: back · thin flare progress · count */
+.quiz__top {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  width: 100%;
+  max-width: 560px;
+  margin: 0 auto;
+}
+.quiz__back {
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  flex-shrink: 0;
+  border-radius: 999px;
+  color: var(--color-ash);
+  background: transparent;
+  transition: color 150ms var(--ease-out-expo), background 150ms var(--ease-out-expo);
+}
+.quiz__back:hover:not(:disabled) { color: var(--color-bone); background: var(--color-cinema-raise); }
+.quiz__back:disabled { opacity: 0; pointer-events: none; }
+.quiz__progress {
+  flex: 1;
+  height: 4px;
+  border-radius: 999px;
+  background: oklch(0.3 0.012 65);
+  overflow: hidden;
+}
+.quiz__progress-fill {
+  height: 100%;
+  border-radius: 999px;
+  background: var(--color-signal-flare);
+  transition: width 450ms var(--ease-out-expo);
+}
+.quiz__count {
+  flex-shrink: 0;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.1em;
+  color: var(--color-ash);
+  font-variant-numeric: tabular-nums;
+}
+
+/* The question screen, pinned toward the vertical center. */
+.quiz__screen {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 560px;
+  margin: auto;
+  padding: clamp(24px, 6vw, 48px) 0;
+}
+.quiz__kicker {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--color-ash);
+}
+.quiz__prompt {
+  margin: 12px 0 clamp(22px, 5vw, 34px);
+  font-size: clamp(1.7rem, 6vw, 2.5rem);
+  font-weight: 700;
+  line-height: 1.08;
+  letter-spacing: -0.01em;
+  color: var(--color-floodlight);
+  text-wrap: balance;
+}
+
+.quiz__options {
+  display: flex;
+  flex-direction: column;
+  gap: 11px;
+}
+.quiz__option {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  min-height: 60px;
+  padding: 17px 20px;
+  text-align: left;
+  border-radius: 14px;
+  /* Lifted clearly off the cinema-black base so it reads as a tappable surface
+   * (raw cinema-raise is too subtle on a dark field). */
+  background: oklch(0.265 0.014 65);
+  border: 1px solid oklch(0.42 0.013 65);
+  color: var(--color-bone);
+  font-size: clamp(1.05rem, 3.6vw, 1.25rem);
+  font-weight: 600;
+  line-height: 1.15;
+  cursor: pointer;
+  transition: background 160ms var(--ease-out-expo), border-color 160ms var(--ease-out-expo),
+    transform 160ms var(--ease-out-expo), box-shadow 160ms var(--ease-out-expo);
+}
+.quiz__option:hover {
+  background: oklch(0.31 0.015 65);
+  border-color: color-mix(in oklab, oklch(0.42 0.013 65) 55%, var(--color-signal-flare));
+}
+.quiz__option:active {
+  transform: scale(0.985);
+  color: var(--color-floodlight);
+  box-shadow: inset 0 0 0 2px var(--color-signal-flare);
+}
+.quiz__option:focus-visible {
+  outline: 2px solid var(--color-signal-flare);
+  outline-offset: 3px;
+}
+.quiz__option-flag { font-size: 1.3em; line-height: 1; }
+
+.quiz__skip {
+  align-self: center;
+  margin-top: 22px;
+  padding: 8px 4px;
+  font-size: 0.95rem;
+  color: var(--color-ash);
+  background: transparent;
+  border-bottom: 1px solid transparent;
+  transition: color 150ms var(--ease-out-expo), border-color 150ms var(--ease-out-expo);
+}
+.quiz__skip:hover { color: var(--color-bone); border-bottom-color: var(--color-ash); }
+
+/* Suspense — the "finding your team" labor illusion. */
+.quiz__loader {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 26px;
+}
+.quiz__skeleton {
+  position: relative;
+  width: clamp(150px, 42vw, 190px);
+  aspect-ratio: 9 / 16;
+  border-radius: 18px;
+  overflow: hidden;
+  background: oklch(0.26 0.013 65);
+  border: 1px solid oklch(0.4 0.012 65);
+  box-shadow: 0 24px 80px oklch(0.67 0.21 35 / 0.12); /* faint flare bloom — "developing" */
+}
+/* Printing shimmer — visible effort, the labor illusion. */
+.quiz__skeleton::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(110deg, transparent 28%, oklch(0.45 0.02 65 / 0.55) 50%, transparent 72%);
+  transform: translateX(-110%);
+  animation: quiz-shimmer 1.5s ease-in-out infinite;
+}
+.quiz__loader-line {
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--color-bone);
+}
+.quiz__dots::after {
+  content: '';
+  animation: quiz-dots 1.4s steps(1, end) infinite;
+}
+
+/* Error */
+.quiz__error { display: flex; flex-direction: column; align-items: center; text-align: center; max-width: 380px; }
+.quiz__error-text { margin: 4px 0 22px; color: var(--color-ash); }
+.quiz__retry {
+  padding: 14px 30px;
+  border-radius: 12px;
+  background: var(--color-signal-flare);
+  color: var(--color-cinema-black);
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  transition: background 180ms var(--ease-out-expo), transform 180ms var(--ease-out-expo);
+}
+.quiz__retry:hover { background: var(--color-flare-deep); transform: translateY(-2px); }
+
+@keyframes quiz-shimmer {
+  to { transform: translateX(110%); }
+}
+@keyframes quiz-dots {
+  0% { content: ''; }
+  25% { content: '.'; }
+  50% { content: '..'; }
+  75% { content: '...'; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .quiz__skeleton::after, .quiz__dots::after { animation: none; }
+  .quiz__progress-fill { transition: none; }
+}

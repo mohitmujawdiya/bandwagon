@@ -6,15 +6,22 @@ import type { Nation, Playstyle, Energy, HeritageKey, RegionPull } from '../data
 import { NATIONS } from '../data/nations'
 
 export interface QuizAnswers {
-  /** Roots, or null for a pure newcomer. When set, dominates the match. */
-  heritage: HeritageKey | null
+  /** Roots, or null for a pure newcomer. When set, dominates the match. A quiz
+   * "Roots" option can cover several keys (e.g. Latin America), hence the array. */
+  heritage: HeritageKey | HeritageKey[] | null
   /** -2 (love juggernauts) .. +2 (love underdogs). 0 = no preference. */
   underdog: number
   playstyle: Playstyle | null
-  region: RegionPull | null
+  /** A single region or a set (e.g. "Asia & the Middle East"). */
+  region: RegionPull | RegionPull[] | null
   /** A giant the user would love to see beaten; boosts that giant's rivals. */
   rivalCode: string | null
   energy: Energy | null
+}
+
+/** Normalize a "value | value[] | null" answer to a plain array. */
+function asArray<T>(v: T | T[] | null | undefined): T[] {
+  return v == null ? [] : Array.isArray(v) ? v : [v]
 }
 
 export interface RankedNation {
@@ -45,7 +52,8 @@ const WEIGHT = {
 export function scoreNation(nation: Nation, answers: QuizAnswers): number {
   let score = 0
 
-  if (answers.heritage && nation.heritageTags.includes(answers.heritage)) {
+  const heritageKeys = asArray(answers.heritage)
+  if (heritageKeys.length && nation.heritageTags.some((t) => heritageKeys.includes(t))) {
     score += WEIGHT.heritage
   }
 
@@ -57,7 +65,7 @@ export function scoreNation(nation: Nation, answers: QuizAnswers): number {
     score += WEIGHT.underdog * answerNorm * nationNorm
   }
 
-  if (answers.region && nation.region === answers.region) score += WEIGHT.region
+  if (asArray(answers.region).includes(nation.region)) score += WEIGHT.region
   if (answers.playstyle && nation.playstyles.includes(answers.playstyle)) score += WEIGHT.playstyle
   if (answers.energy && nation.energy.includes(answers.energy)) score += WEIGHT.energy
   if (answers.rivalCode && nation.rivals.includes(answers.rivalCode)) score += WEIGHT.rival

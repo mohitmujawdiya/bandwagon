@@ -2,7 +2,8 @@ import { test, expect } from '@playwright/test'
 import { captureConsoleErrors } from './helpers/errors'
 
 async function waitForApp(page: import('@playwright/test').Page) {
-  await page.waitForSelector('[data-testid="app-navigation"]', { timeout: 15000 })
+  // app-root is always present; the nav is hidden on immersive routes (/p/).
+  await page.waitForSelector('[data-testid="app-root"]', { timeout: 15000 })
 }
 
 // The visible passport (PassportActions also renders an off-screen export clone

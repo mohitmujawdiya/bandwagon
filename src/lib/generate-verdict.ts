@@ -31,11 +31,13 @@ export function isUsableVerdict(text: string, nation: Nation): boolean {
 
 function describeAnswers(answers: QuizAnswers): string {
   const bits: string[] = []
-  if (answers.heritage) bits.push(`roots: ${answers.heritage}`)
+  const heritage = Array.isArray(answers.heritage) ? answers.heritage : answers.heritage ? [answers.heritage] : []
+  const region = Array.isArray(answers.region) ? answers.region : answers.region ? [answers.region] : []
+  if (heritage.length) bits.push(`roots: ${heritage.join(', ')}`)
   if (answers.underdog > 0) bits.push('loves an underdog story')
   if (answers.underdog < 0) bits.push('wants a juggernaut')
   if (answers.playstyle) bits.push(`football taste: ${answers.playstyle}`)
-  if (answers.region) bits.push(`pulled toward: ${answers.region}`)
+  if (region.length) bits.push(`pulled toward: ${region.join(', ')}`)
   if (answers.energy) bits.push(`personality: ${answers.energy}`)
   if (answers.rivalCode && NATION_BY_CODE[answers.rivalCode]) {
     bits.push(`would love to see ${NATION_BY_CODE[answers.rivalCode].name} beaten`)
