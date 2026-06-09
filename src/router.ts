@@ -7,11 +7,13 @@ export type Path =
   | `*`
   | `/`
   | `/home`
+  | `/p/:id`
   | `/preview`
   | `/settings`
 
 export type Params = {
   '/*': { '*': string }
+  '/p/:id': { id: string }
 }
 
 export type ModalPath = never

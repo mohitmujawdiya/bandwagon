@@ -1,9 +1,12 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { NATION_BY_CODE } from '../data/nations'
 import { assemblePassport } from '../lib/passport'
 import { SupporterPassport } from '../components/passport/SupporterPassport'
 import { PassportActions } from '../components/passport/PassportActions'
 import { capturePassportDataUrl } from '../components/passport/exportPassport'
+import { useCreatePassport } from '../lib/use-create-passport'
+import { Button } from '../components/ui'
 import type { QuizAnswers } from '../lib/assign'
 
 const NEUTRAL: QuizAnswers = {
@@ -82,9 +85,12 @@ export default function Preview() {
 
   return (
     <div className="mx-auto max-w-[1400px] px-5 py-10">
-      <p className="mb-8 text-center font-mono text-xs uppercase tracking-[0.18em] text-muted-foreground">
-        Supporter Passport / preview
-      </p>
+      <div className="mb-8 flex flex-col items-center gap-4">
+        <p className="font-mono text-xs uppercase tracking-[0.18em] text-muted-foreground">
+          Supporter Passport / preview
+        </p>
+        <CreateTestPassport />
+      </div>
       <div className="flex flex-wrap justify-center gap-7">
         {passports.map((p) => (
           <div key={p.nation.code} className="w-[360px]">
@@ -93,5 +99,36 @@ export default function Preview() {
         ))}
       </div>
     </div>
+  )
+}
+
+/** Dev-only: persist a real passport and open its /p/[id] page. */
+function CreateTestPassport() {
+  const create = useCreatePassport()
+  const navigate = useNavigate()
+  const [busy, setBusy] = useState(false)
+
+  const samples: QuizAnswers[] = [
+    { heritage: null, underdog: 2, playstyle: 'flair', region: 'africa', rivalCode: null, energy: 'joyful' },
+    { heritage: 'mexico', underdog: 0, playstyle: null, region: null, rivalCode: null, energy: 'passionate' },
+    { heritage: null, underdog: -2, region: 'europe', playstyle: 'technical', rivalCode: null, energy: 'cool' },
+    { heritage: 'south-america', underdog: 1, playstyle: 'flair', region: null, rivalCode: null, energy: 'passionate' },
+  ]
+
+  async function make() {
+    setBusy(true)
+    try {
+      const sample = samples[Math.floor(Math.random() * samples.length)]
+      const shareId = await create(sample)
+      navigate(`/p/${shareId}?new=1`)
+    } finally {
+      setBusy(false)
+    }
+  }
+
+  return (
+    <Button loading={busy} onClick={make}>
+      Create a real passport
+    </Button>
   )
 }
