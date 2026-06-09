@@ -18,4 +18,5 @@ export const nav: NavItem[] = [
   { path: '/home', label: 'Home' },
   { path: '/settings', label: 'Settings' },
   // ── Features add nav items below this line ──
+  { path: '/analytics', label: 'Analytics', roles: ['admin'] },
 ]
