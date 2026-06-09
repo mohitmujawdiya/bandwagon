@@ -12,6 +12,11 @@ colors:
   ash: "oklch(62% 0.01 70)"
   bone: "oklch(92% 0.008 80)"
   floodlight: "oklch(97% 0.006 85)"
+  # Lifted interactive surfaces (quiz answer tiles, suspense skeleton): a step
+  # brighter than cinema-raise so taps read as tappable on the dark field.
+  # Currently realized inline in quiz.css; promote to @theme when next touched.
+  cinema-lift: "oklch(26.5% 0.014 65)"
+  cinema-edge: "oklch(42% 0.013 65)"
   # Per-nation duotone: RUNTIME tokens, overridden per nation from flag colors.
   # Values below are the Argentina sample only; the engine swaps them per result.
   nation-primary: "oklch(72% 0.13 230)"
@@ -79,13 +84,13 @@ components:
     rounded: "{rounded.md}"
     padding: "18px 36px"
   chip-answer:
-    backgroundColor: "{colors.cinema-raise}"
+    backgroundColor: "{colors.cinema-lift}"
     textColor: "{colors.bone}"
     typography: "{typography.title}"
     rounded: "{rounded.md}"
     padding: "20px 24px"
   chip-answer-selected:
-    backgroundColor: "{colors.cinema-raise}"
+    backgroundColor: "{colors.cinema-lift}"
     textColor: "{colors.floodlight}"
     typography: "{typography.title}"
     rounded: "{rounded.md}"
@@ -139,6 +144,8 @@ The passport's color is generated per result from the nation's flag, in OKLCH, a
 - **Ash** (`oklch(62% 0.01 70)`): muted secondary text, captions, the "1 of N" sub-line, field labels.
 - **Bone** (`oklch(92% 0.008 80)`): primary text on dark. A warm off-white, the "paper" of the passport data.
 - **Floodlight** (`oklch(97% 0.006 85)`): reserved for maximum-emphasis type and selected states only.
+- **Cinema Lift** (`oklch(26.5% 0.014 65)`): the lifted *interactive* surface, a step brighter than Cinema Raise. Quiz answer tiles and the suspense skeleton sit here so a tap target reads as tappable against the dark field; passive surfaces (cards, the ticket-stub band, the email field) stay on Cinema Raise.
+- **Cinema Edge** (`oklch(42% 0.013 65)`): the 1px border on those lifted interactive surfaces, brighter than Cinema Line so the tile outline holds at rest.
 
 ### Named Rules
 **The Two Rooms Rule.** The chrome is the lobby; the passport is the screen. Signal Flare lives in the lobby and is forbidden on the passport hero. The nation duotone lives on the screen and is forbidden as chrome decoration. Never let the two accent systems share a surface.
@@ -188,8 +195,9 @@ Lead with the feel, then the spec. Components are tactile and confident, built f
 - **Ghost:** transparent with a 1px Cinema Line full border, Bone text, same Martian Mono label. Hover: fills to Cinema Raise. Secondary actions (download, skip, back).
 
 ### Chips / Answer Tiles
-- **Style:** large editorial choice rows on Cinema Raise, Bone text in Hanken Grotesk Title size, 12px radius, generous `20px 24px` padding. Big tap targets (min height 56px) for one-thumb mobile play.
-- **State:** selected floods text to Floodlight and adds a 2px inset Signal Flare ring (during the quiz the nation is still unknown, so flare carries selection). Never a 2x2 grid of identical icon cards: these are stacked, full-width, text-led choices.
+- **Style:** large editorial choice rows on **Cinema Lift** with a 1px **Cinema Edge** border, Bone text in Hanken Grotesk Title size (`clamp(1.05rem, 3.6vw, 1.25rem)`, 600), 14px radius, generous `17px 20px` padding, min-height 60px for one-thumb mobile play. Stacked full-width and text-led, never a 2x2 grid of identical icon cards.
+- **Behavior:** a tap auto-advances the quiz, so there is no persistent "selected" state, the tap itself is the feedback. `:active` floods text to Floodlight, presses `scale(0.985)`, and flashes a 2px inset Signal Flare ring (the nation is still unknown mid-quiz, so flare carries the touch). Hover lifts the fill (`oklch(0.31 0.015 65)`) and tints the border toward flare.
+- **The Tappable-Lift Rule.** Interactive tiles sit on Cinema Lift, never raw Cinema Raise. The extra step of lightness is what separates "tap me" from a passive panel on a near-black field. If an answer tile looks like text floating on the background, it is too dark.
 
 ### Inputs / Fields
 - **Style:** Cinema Raise fill, Bone text, 1px Cinema Line border, 12px radius, `16px 18px` padding. Quiet by default; the email field is an optional upgrade, never a gate.
@@ -197,22 +205,33 @@ Lead with the feel, then the spec. Components are tactile and confident, built f
 - **Error / Disabled:** error border in a desaturated flare, message in Ash; disabled drops to 50% and removes the border.
 
 ### Navigation
-- **Style:** minimal. A wordmark left, at most one ghost action right. Quiz uses a thin top progress bar in Signal Flare over Cinema Line, not a nav. Mobile-first; the chrome gets out of the way of the show.
+- **Style:** minimal. A wordmark left, at most one ghost action right. Mobile-first; the chrome gets out of the way of the show.
+- **The Immersive-Hide Rule.** On the two full-bleed surfaces, the quiz (`/quiz`) and the passport reveal (`/p/*`), the app nav is removed entirely (a `useLocation` check in `_app.tsx`) so nothing competes with the show. It returns on the lobby surfaces (home, settings).
+- **Quiz progress:** not a nav but a thin 4px top rail, Signal Flare fill over a track at `oklch(0.3 0.012 65)` (lifted above Cinema Line so the empty bar still reads), filling 1/6 per answer on a 450ms ease-out-expo width transition. Paired with a Martian Mono "n / 6" count and a ghost back arrow.
+
+### The Reveal Suspense (signature)
+The bridge between the last quiz answer and the passport, built as a deliberate "labor illusion": a wait that visibly shows effort reads as more valuable than an instant result. It is safe to stage this drama only because every nation is engineered to land as a hero (see the passport); a visible build-up to a result that felt random would be worse than no wait at all.
+- **Skeleton:** one 9:16 poster block on Cinema Lift with a Cinema Edge border, centered under a faint Flare Bloom (the poster "developing"). A diagonal Floodlight shimmer sweeps it on a 1.5s loop, the press "printing" the passport.
+- **Copy:** three honest Martian Mono lines cycling on an ~830ms beat ("READING YOUR ANSWERS", "FINDING YOUR NATION", "PRINTING YOUR PASSPORT") with animated trailing dots.
+- **Timing:** ~2.5s minimum, run in parallel with the real create call so it never drags past the work. Reduced-motion collapses the shimmer and dots to a still block.
 
 ### The Supporter Passport (signature component)
 The entire product compresses into this artifact, so it carries the most craft.
 - **Format:** 9:16 poster by default (Stories-native), exportable to image for sharing and download.
 - **Color:** Nation Deep drenches the full bleed; Nation Primary and Glow carry the type. Grain and vignette overlay the whole surface.
-- **Type:** the nation name in Tusker Display, monumental and edge-bleeding. The archetype as a Martian Mono kicker above or below it ("THE STREET POETS").
+- **Type:** the nation name in Anton, monumental and edge-bleeding, JS-fit to span the poster width on one line. The archetype as a Martian Mono kicker above or below it ("THE STREET POETS").
 - **Data band:** a translucent ticket-stub band (the one sanctioned glass surface) carrying Martian Mono data, supporter number, group, rank, with a subtle perforated edge.
 - **Traits:** rendered as editorial, oversized numerals that count up on reveal (NumberFlow), woven into the composition like a credits roll. Never a SaaS hero-metric grid.
 - **Rarity:** off-meta nations earn a restrained foil or iridescent accent and a "limited edition" editorial mark, as an in-app delight. The static export reads premium without it.
+- **The Export Fit Rule.** `html-to-image` rasterizes the masthead in a fallback font roughly 9% wider than Anton (it ignores supplied `fontEmbedCSS`), so the export instance fits the name to 88% of width (`EXPORT_FIT_FRACTION`) and never clips, while the on-screen masthead stays full-width Anton. Known follow-up: render the name as inline SVG (or `modern-screenshot`) for pixel-true export.
 
 ## 6. Do's and Don'ts
 
 ### Do:
 - **Do** drench the passport in the nation's duotone (Nation Deep full bleed, Nation Primary and Glow type). The whole surface, never a stripe or a corner.
-- **Do** set the nation name monumentally in Tusker Grotesk as the largest element on screen.
+- **Do** set the nation name monumentally in Anton as the largest element on screen, fit to span the poster width.
+- **Do** gate the visible-effort suspense to a guaranteed-flattering result: the labor illusion lifts perceived value only when the payoff lands as a great, earned match. Every nation reads as a hero.
+- **Do** hide the app nav on the immersive surfaces (`/quiz`, `/p/*`); seat interactive tiles on Cinema Lift, never raw Cinema Raise.
 - **Do** keep Signal Flare to the chrome and scarce (the One CTA), and keep the nation duotone to the passport.
 - **Do** render supporter traits as editorial count-up numerals woven into the poster.
 - **Do** use OKLCH and tint every neutral warm; pair every flag color with the nation name, crest, and a text label so meaning never rests on color alone (WCAG 2.2 AA).

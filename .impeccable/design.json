@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-06-08T12:00:00Z",
+  "generatedAt": "2026-06-09T12:00:00Z",
   "title": "Design System: Bandwagon",
   "extensions": {
     "colorMeta": {
@@ -32,6 +32,21 @@
           "oklch(64% 0.010 72)",
           "oklch(80% 0.009 78)",
           "oklch(94% 0.008 82)"
+        ]
+      },
+      "cinema-lift": {
+        "role": "neutral",
+        "displayName": "Cinema Lift",
+        "canonical": "oklch(26.5% 0.014 65)",
+        "tonalRamp": [
+          "oklch(15% 0.012 65)",
+          "oklch(20% 0.013 65)",
+          "oklch(26.5% 0.014 65)",
+          "oklch(34% 0.013 65)",
+          "oklch(45% 0.012 67)",
+          "oklch(58% 0.011 70)",
+          "oklch(74% 0.010 76)",
+          "oklch(92% 0.008 82)"
         ]
       },
       "bone": {
@@ -66,8 +81,8 @@
       }
     },
     "typographyMeta": {
-      "display": { "displayName": "Display", "purpose": "The nation name on the passport, and landing hero. Tusker Grotesk, towering and condensed. Always the largest element on screen." },
-      "headline": { "displayName": "Headline", "purpose": "Section openers and the landing call. Tusker Grotesk, large but below Display." },
+      "display": { "displayName": "Display", "purpose": "The nation name on the passport, and landing hero. Anton, towering and condensed. Always the largest element on screen." },
+      "headline": { "displayName": "Headline", "purpose": "Section openers and the landing call. Anton, large but below Display." },
       "title": { "displayName": "Title", "purpose": "Quiz questions and answer-tile labels. Hanken Grotesk, confident and readable." },
       "body": { "displayName": "Body", "purpose": "The 'why you' paragraph and explanatory UI. Hanken Grotesk, max 65-70ch, extra line-height on dark." },
       "label": { "displayName": "Label / Data", "purpose": "Archetype kicker, passport data fields, CTA text, tags. Martian Mono, small, tracked, uppercase." }
@@ -110,9 +125,17 @@
       "name": "Answer Tile",
       "kind": "chip",
       "refersTo": "chip-answer",
-      "description": "A full-width editorial choice row in the quiz. Large tap target, text-led, never an icon grid.",
-      "html": "<button class=\"ds-chip-answer\">The underdog with a story</button>",
-      "css": ".ds-chip-answer { display: block; width: 100%; text-align: left; min-height: 56px; font-family: 'Hanken Grotesk', 'Noto Sans', sans-serif; font-size: clamp(1.25rem, 4vw, 1.75rem); font-weight: 600; line-height: 1.1; color: oklch(92% 0.008 80); background: oklch(23% 0.013 65); border: 1px solid oklch(34% 0.012 65); border-radius: 12px; padding: 20px 24px; cursor: pointer; transition: color 150ms cubic-bezier(0.16,1,0.3,1), box-shadow 150ms cubic-bezier(0.16,1,0.3,1), background 150ms cubic-bezier(0.16,1,0.3,1); } .ds-chip-answer:hover { background: oklch(27% 0.013 65); } .ds-chip-answer[aria-pressed=\"true\"] { color: oklch(97% 0.006 85); box-shadow: inset 0 0 0 2px oklch(67% 0.21 35); } .ds-chip-answer:focus-visible { outline: 2px solid oklch(67% 0.21 35); outline-offset: 3px; }"
+      "description": "A full-width editorial choice row in the quiz, on Cinema Lift so it reads as tappable on the dark field. A tap auto-advances, so there is no persistent selected state; the tap itself is the feedback. Text-led, stacked, never an icon grid.",
+      "html": "<button class=\"ds-chip-answer\">The underdog shocking the world</button>",
+      "css": ".ds-chip-answer { display: flex; align-items: center; width: 100%; text-align: left; min-height: 60px; font-family: 'Hanken Grotesk', 'Noto Sans', sans-serif; font-size: clamp(1.05rem, 3.6vw, 1.25rem); font-weight: 600; line-height: 1.15; color: oklch(92% 0.008 80); background: oklch(26.5% 0.014 65); border: 1px solid oklch(42% 0.013 65); border-radius: 14px; padding: 17px 20px; cursor: pointer; transition: color 160ms cubic-bezier(0.16,1,0.3,1), background 160ms cubic-bezier(0.16,1,0.3,1), border-color 160ms cubic-bezier(0.16,1,0.3,1), transform 160ms cubic-bezier(0.16,1,0.3,1), box-shadow 160ms cubic-bezier(0.16,1,0.3,1); } .ds-chip-answer:hover { background: oklch(31% 0.015 65); border-color: oklch(50% 0.06 45); } .ds-chip-answer:active { color: oklch(97% 0.006 85); transform: scale(0.985); box-shadow: inset 0 0 0 2px oklch(67% 0.21 35); } .ds-chip-answer:focus-visible { outline: 2px solid oklch(67% 0.21 35); outline-offset: 3px; }"
+    },
+    {
+      "name": "Reveal Suspense (signature)",
+      "kind": "custom",
+      "refersTo": null,
+      "description": "The labor-illusion loader between the last quiz answer and the passport: a 9:16 poster skeleton on Cinema Lift with a printing shimmer and a faint flare bloom, under a cycling Martian Mono status line. Visible effort reads as more valuable, safe only because every nation lands as a hero.",
+      "html": "<div class=\"ds-suspense\"><div class=\"ds-suspense-skeleton\"></div><p class=\"ds-suspense-line\">FINDING YOUR NATION...</p></div>",
+      "css": ".ds-suspense { display: flex; flex-direction: column; align-items: center; gap: 26px; } .ds-suspense-skeleton { position: relative; width: clamp(150px, 42vw, 190px); aspect-ratio: 9 / 16; border-radius: 18px; overflow: hidden; background: oklch(26% 0.013 65); border: 1px solid oklch(40% 0.012 65); box-shadow: 0 24px 80px oklch(67% 0.21 35 / 0.12); } .ds-suspense-skeleton::after { content: ''; position: absolute; inset: 0; background: linear-gradient(110deg, transparent 28%, oklch(45% 0.02 65 / 0.55) 50%, transparent 72%); transform: translateX(-110%); animation: ds-suspense-shimmer 1.5s ease-in-out infinite; } @keyframes ds-suspense-shimmer { to { transform: translateX(110%); } } .ds-suspense-line { font-family: 'Martian Mono', ui-monospace, monospace; font-size: 0.82rem; letter-spacing: 0.16em; text-transform: uppercase; color: oklch(92% 0.008 80); } @media (prefers-reduced-motion: reduce) { .ds-suspense-skeleton::after { animation: none; } }"
     },
     {
       "name": "Email Field",
@@ -126,9 +149,9 @@
       "name": "Supporter Passport (signature)",
       "kind": "custom",
       "refersTo": null,
-      "description": "The drenched 9:16 poster the whole product compresses into. Nation duotone floods the surface; Tusker name towers; Martian Mono data band reads like a ticket stub.",
+      "description": "The drenched 9:16 poster the whole product compresses into. Nation duotone floods the surface; the Anton name towers; Martian Mono data band reads like a ticket stub.",
       "html": "<article class=\"ds-passport\" style=\"--nation-primary: oklch(72% 0.13 230); --nation-deep: oklch(30% 0.07 245); --nation-glow: oklch(88% 0.08 215);\"><div class=\"ds-passport-grain\"></div><div class=\"ds-passport-body\"><span class=\"ds-passport-kicker\">THE STREET POETS</span><h1 class=\"ds-passport-name\">ARGENTINA</h1><div class=\"ds-passport-stub\"><span>NO. 04127</span><span>GROUP C</span><span>PASSION 92</span></div></div></article>",
-      "css": ".ds-passport { position: relative; aspect-ratio: 9 / 16; width: 320px; max-width: 100%; overflow: hidden; border-radius: 20px; background: radial-gradient(120% 90% at 50% 18%, var(--nation-primary), var(--nation-deep) 70%); box-shadow: 0 24px 120px var(--nation-primary); } .ds-passport-grain { position: absolute; inset: 0; pointer-events: none; opacity: 0.10; background-image: radial-gradient(oklch(100% 0 0) 0.5px, transparent 0.5px); background-size: 3px 3px; mix-blend-mode: overlay; } .ds-passport::after { content: ''; position: absolute; inset: 0; pointer-events: none; box-shadow: inset 0 0 140px 30px oklch(18% 0.012 65 / 0.55); } .ds-passport-body { position: relative; height: 100%; display: flex; flex-direction: column; justify-content: flex-end; padding: 28px 24px; } .ds-passport-kicker { font-family: 'Martian Mono', ui-monospace, monospace; font-size: 0.7rem; font-weight: 500; letter-spacing: 0.16em; text-transform: uppercase; color: var(--nation-glow); } .ds-passport-name { font-family: 'Tusker Grotesk', 'Arial Narrow', sans-serif; font-weight: 600; font-size: clamp(3.5rem, 22vw, 5.5rem); line-height: 0.86; letter-spacing: -0.01em; text-transform: uppercase; color: var(--nation-glow); margin: 4px 0 18px; } .ds-passport-stub { display: flex; gap: 14px; flex-wrap: wrap; padding: 12px 14px; border-radius: 12px; background: oklch(18% 0.012 65 / 0.28); backdrop-filter: blur(8px); border: 1px solid oklch(92% 0.008 80 / 0.18); font-family: 'Martian Mono', ui-monospace, monospace; font-size: 0.65rem; letter-spacing: 0.1em; color: oklch(92% 0.008 80); }"
+      "css": ".ds-passport { position: relative; aspect-ratio: 9 / 16; width: 320px; max-width: 100%; overflow: hidden; border-radius: 20px; background: radial-gradient(120% 90% at 50% 18%, var(--nation-primary), var(--nation-deep) 70%); box-shadow: 0 24px 120px var(--nation-primary); } .ds-passport-grain { position: absolute; inset: 0; pointer-events: none; opacity: 0.10; background-image: radial-gradient(oklch(100% 0 0) 0.5px, transparent 0.5px); background-size: 3px 3px; mix-blend-mode: overlay; } .ds-passport::after { content: ''; position: absolute; inset: 0; pointer-events: none; box-shadow: inset 0 0 140px 30px oklch(18% 0.012 65 / 0.55); } .ds-passport-body { position: relative; height: 100%; display: flex; flex-direction: column; justify-content: flex-end; padding: 28px 24px; } .ds-passport-kicker { font-family: 'Martian Mono', ui-monospace, monospace; font-size: 0.7rem; font-weight: 500; letter-spacing: 0.16em; text-transform: uppercase; color: var(--nation-glow); } .ds-passport-name { font-family: 'Anton', 'Arial Narrow', sans-serif; font-weight: 600; font-size: clamp(3.5rem, 22vw, 5.5rem); line-height: 0.86; letter-spacing: -0.01em; text-transform: uppercase; color: var(--nation-glow); margin: 4px 0 18px; } .ds-passport-stub { display: flex; gap: 14px; flex-wrap: wrap; padding: 12px 14px; border-radius: 12px; background: oklch(18% 0.012 65 / 0.28); backdrop-filter: blur(8px); border: 1px solid oklch(92% 0.008 80 / 0.18); font-family: 'Martian Mono', ui-monospace, monospace; font-size: 0.65rem; letter-spacing: 0.1em; color: oklch(92% 0.008 80); }"
     }
   ],
   "narrative": {
@@ -146,18 +169,23 @@
       { "name": "The Two Rooms Rule", "body": "The chrome is the lobby; the passport is the screen. Signal Flare lives in the lobby and is forbidden on the passport hero. The nation duotone lives on the screen and is forbidden as chrome decoration.", "section": "colors" },
       { "name": "The Drench Rule", "body": "On the passport, the nation does not get a stripe, a badge, or a corner. It gets the whole surface. Nation Deep floods the full bleed; Nation Primary and Glow carry the type.", "section": "colors" },
       { "name": "The Flare Rarity Rule", "body": "Signal Flare covers a small fraction of any chrome screen. Its scarcity is what makes the CTA read as the one thing to do.", "section": "colors" },
-      { "name": "The Monument Rule", "body": "The nation name is always the biggest thing on screen and always Tusker. It does not share the stage with another element at the same scale.", "section": "typography" },
+      { "name": "The Monument Rule", "body": "The nation name is always the biggest thing on screen and always Anton, fit to span the poster width. It does not share the stage with another element at the same scale.", "section": "typography" },
       { "name": "The Solid-Color Rule", "body": "Type is one solid color, always. Gradient text is forbidden. Emphasis comes from scale, weight, and color choice.", "section": "typography" },
-      { "name": "The No-Box-Shadow Rule", "body": "Gray drop shadows are forbidden. Depth is grain, vignette, tonal layering, and colored bloom. The only shadows permitted are the flare bloom and the nation bloom, and only on a hero moment.", "section": "elevation" }
+      { "name": "The No-Box-Shadow Rule", "body": "Gray drop shadows are forbidden. Depth is grain, vignette, tonal layering, and colored bloom. The only shadows permitted are the flare bloom and the nation bloom, and only on a hero moment.", "section": "elevation" },
+      { "name": "The Tappable-Lift Rule", "body": "Interactive tiles sit on Cinema Lift (a step brighter than Cinema Raise), never raw Cinema Raise. The extra lightness is what separates 'tap me' from a passive panel on a near-black field.", "section": "colors" },
+      { "name": "The Immersive-Hide Rule", "body": "On the full-bleed surfaces (the quiz and the passport reveal), the app nav is removed entirely so nothing competes with the show. It returns on the lobby surfaces.", "section": "elevation" },
+      { "name": "The Export Fit Rule", "body": "html-to-image rasterizes the masthead in a fallback font roughly 9% wider than Anton, so the export instance fits the name to 88% of width and never clips, while on-screen stays full-width Anton.", "section": "typography" }
     ],
     "dos": [
       "Do drench the passport in the nation's duotone (Nation Deep full bleed, Nation Primary and Glow type). The whole surface, never a stripe or a corner.",
-      "Do set the nation name monumentally in Tusker Grotesk as the largest element on screen.",
+      "Do set the nation name monumentally in Anton as the largest element on screen.",
       "Do keep Signal Flare to the chrome and scarce (the One CTA), and keep the nation duotone to the passport.",
       "Do render supporter traits as editorial count-up numerals woven into the poster.",
       "Do use OKLCH and tint every neutral warm; pair every flag color with the nation name, crest, and a text label so meaning never rests on color alone (WCAG 2.2 AA).",
       "Do honor prefers-reduced-motion: the suspense loader, confetti, count-ups, and tilt all collapse to a dignified instant state.",
-      "Do animate only transform and opacity, on ease-out-expo / quint, no bounce."
+      "Do animate only transform and opacity, on ease-out-expo / quint, no bounce.",
+      "Do gate the visible-effort suspense to a guaranteed-flattering result: the labor illusion lifts perceived value only when the payoff lands as a great, earned match.",
+      "Do hide the app nav on the immersive surfaces (/quiz, /p/*); seat interactive tiles on Cinema Lift, never raw Cinema Raise."
     ],
     "donts": [
       "Don't make a cheesy BuzzFeed quiz: no clip-art, no stock photography, no low-rent quiz-site chrome.",
