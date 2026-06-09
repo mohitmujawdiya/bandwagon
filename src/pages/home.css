@@ -225,7 +225,6 @@
   max-width: 1080px;
   margin: 0 auto;
   padding: clamp(40px, 7vw, 88px) clamp(20px, 5vw, 56px);
-  border-top: 1px solid var(--color-cinema-line);
 }
 .how__eyebrow {
   font-family: var(--font-mono);
@@ -275,7 +274,6 @@
 .closing {
   text-align: center;
   padding: clamp(56px, 9vw, 112px) clamp(20px, 5vw, 56px) clamp(72px, 11vw, 132px);
-  border-top: 1px solid var(--color-cinema-line);
 }
 .closing__title {
   font-family: var(--font-display);
